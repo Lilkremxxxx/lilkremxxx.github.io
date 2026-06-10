@@ -20,6 +20,25 @@ const normalizeTags = (tags) =>
     .map((tag) => String(tag).trim())
     .filter(Boolean);
 
+const normalizeBlocks = (blocks) =>
+  (Array.isArray(blocks) ? blocks : [])
+    .map((block, index) => {
+      if (!block || typeof block !== 'object') return null;
+      const type = String(block.type || '').trim();
+      if (!type) return null;
+
+      const data = block.data && typeof block.data === 'object' && !Array.isArray(block.data)
+        ? block.data
+        : {};
+
+      return {
+        id: String(block.id || `block-${index + 1}`),
+        type,
+        data
+      };
+    })
+    .filter(Boolean);
+
 const normalizePost = (row) => ({
   id: row.id,
   slug: row.slug,
@@ -28,6 +47,11 @@ const normalizePost = (row) => ({
   coverImageUrl: row.cover_image_url,
   contentMarkdown: row.content_markdown,
   contentHtml: row.content_html,
+  contentBlocks: Array.isArray(row.content_blocks)
+    ? row.content_blocks
+    : typeof row.content_blocks === 'string' && row.content_blocks.length
+      ? JSON.parse(row.content_blocks)
+      : [],
   status: row.status,
   language: row.language,
   readingTimeMinutes: row.reading_time_minutes,
@@ -169,6 +193,7 @@ app.post('/api/blog/posts', requireAdminKey, async (req, res) => {
     coverImageUrl = null,
     contentMarkdown = '',
     contentHtml = '',
+    contentBlocks = [],
     status = 'draft',
     language = 'en',
     readingTimeMinutes = 1,
@@ -184,13 +209,13 @@ app.post('/api/blog/posts', requireAdminKey, async (req, res) => {
     const insertResult = await client.query(
       `
         INSERT INTO blog_posts (
-          slug, title, excerpt, cover_image_url, content_markdown, content_html,
+          slug, title, excerpt, cover_image_url, content_markdown, content_html, content_blocks,
           status, language, reading_time_minutes, published_at, seo_title, seo_description
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
         RETURNING id, slug
       `,
-      [slug, title, excerpt, coverImageUrl, contentMarkdown, contentHtml, status, language, readingTimeMinutes, publishedAt, seoTitle, seoDescription]
+      [slug, title, excerpt, coverImageUrl, contentMarkdown, contentHtml, JSON.stringify(normalizeBlocks(contentBlocks)), status, language, readingTimeMinutes, publishedAt, seoTitle, seoDescription]
     );
 
     await syncPostTags(client, insertResult.rows[0].id, tags);
@@ -213,6 +238,7 @@ app.put('/api/blog/posts/:slug', requireAdminKey, async (req, res) => {
     coverImageUrl = null,
     contentMarkdown = '',
     contentHtml = '',
+    contentBlocks = [],
     status = 'draft',
     language = 'en',
     readingTimeMinutes = 1,
@@ -233,16 +259,17 @@ app.put('/api/blog/posts/:slug', requireAdminKey, async (req, res) => {
             cover_image_url = $4,
             content_markdown = $5,
             content_html = $6,
-            status = $7,
-            language = $8,
-            reading_time_minutes = $9,
-            published_at = $10,
-            seo_title = $11,
-            seo_description = $12
+            content_blocks = $7,
+            status = $8,
+            language = $9,
+            reading_time_minutes = $10,
+            published_at = $11,
+            seo_title = $12,
+            seo_description = $13
         WHERE slug = $1
         RETURNING id, slug
       `,
-      [req.params.slug, title, excerpt, coverImageUrl, contentMarkdown, contentHtml, status, language, readingTimeMinutes, publishedAt, seoTitle, seoDescription]
+      [req.params.slug, title, excerpt, coverImageUrl, contentMarkdown, contentHtml, JSON.stringify(normalizeBlocks(contentBlocks)), status, language, readingTimeMinutes, publishedAt, seoTitle, seoDescription]
     );
 
     if (!updateResult.rows.length) {

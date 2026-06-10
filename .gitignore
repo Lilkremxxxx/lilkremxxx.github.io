@@ -4,3 +4,11 @@ Desing.md
 design.md
 .vercel
 .env
+.env.*
+*.pem
+*.key
+*.token
+*.credentials
+*.secret
+.cloudflared/*.json
+.config/**/cloudflared.yml

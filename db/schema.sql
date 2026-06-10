@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS blog_posts (
   cover_image_url TEXT,
   content_markdown TEXT NOT NULL DEFAULT '',
   content_html TEXT NOT NULL DEFAULT '',
+  content_blocks JSONB NOT NULL DEFAULT '[]'::jsonb,
   status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published', 'archived')),
   language TEXT NOT NULL DEFAULT 'en',
   reading_time_minutes INTEGER NOT NULL DEFAULT 1 CHECK (reading_time_minutes > 0),

@@ -179,13 +179,13 @@
 <div class="content-overlay"></div>
 
 <!-- TopNavBar Component -->
-<nav class="bg-surface/70 dark:bg-surface/70 backdrop-blur-md md:backdrop-blur-xl border border-glass-border fixed top-4 w-[calc(100%-2rem)] max-w-5xl rounded-2xl z-50 flex justify-between items-center px-4 md:px-6 py-3 mx-auto transition-all duration-300 ease-in-out left-1/2 -translate-x-1/2">
-    <a href="/" class="nav-link font-headline-md text-lg md:text-headline-md font-bold text-on-surface dark:text-on-surface tracking-tight flex items-center gap-2 hover:text-cyber-lime transition-colors">
+<nav class="bg-surface/70 dark:bg-surface/70 backdrop-blur-md md:backdrop-blur-xl border border-glass-border fixed top-3 md:top-4 w-[calc(100%-1rem)] md:w-[calc(100%-2rem)] max-w-6xl rounded-2xl z-50 flex justify-between items-center gap-3 px-3 sm:px-4 md:px-6 py-3 mx-auto transition-all duration-300 ease-in-out left-1/2 -translate-x-1/2">
+    <a href="/" class="nav-link min-w-0 font-headline-md text-[clamp(0.95rem,2.4vw,1.15rem)] md:text-headline-md font-bold text-on-surface dark:text-on-surface tracking-tight flex items-center gap-2 hover:text-cyber-lime transition-colors shrink">
         <span class="material-symbols-outlined text-cyber-lime hidden sm:inline-block">terminal</span>
-        <span class="hidden sm:inline-block">Nguyen Nhat Bang</span>
-        <span class="sm:hidden text-cyber-lime font-bold">N.N.Bang</span>
+        <span class="hidden sm:inline-block whitespace-nowrap">Nguyen Nhat Bang</span>
+        <span class="sm:hidden text-cyber-lime font-bold whitespace-nowrap">N.N.Bang</span>
     </a>
-    <div class="hidden md:flex items-center gap-6">
+    <div class="hidden md:flex items-center gap-4 xl:gap-6 min-w-0 flex-wrap justify-end">
         <a href="/about" class="nav-link flex items-center gap-1.5 font-label-caps text-on-surface-variant hover:text-cyber-lime transition-colors duration-300">
             <span class="material-symbols-outlined text-[18px]">person</span> ABOUT
         </a>
@@ -197,9 +197,6 @@
         </a>
         <a href="/blog" class="nav-link flex items-center gap-1.5 font-label-caps text-on-surface-variant hover:text-cyber-lime transition-colors duration-300">
             <span class="material-symbols-outlined text-[18px]">auto_stories</span> BLOG
-        </a>
-        <a href="/admin/blog" class="nav-link flex items-center gap-1.5 font-label-caps text-on-surface-variant hover:text-cyber-lime transition-colors duration-300">
-            <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span> ADMIN
         </a>
         <a href="/skill" class="nav-link flex items-center gap-1.5 font-label-caps text-on-surface-variant hover:text-cyber-lime transition-colors duration-300">
             <span class="material-symbols-outlined text-[18px]">psychology</span> SKILL
@@ -218,7 +215,7 @@
 </nav>
 
 <!-- Mobile Bottom Nav Component -->
-<div class="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md bg-surface/80 backdrop-blur-md border border-glass-border rounded-2xl z-50 flex justify-around items-center py-2 px-2 shadow-2xl">
+<div class="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-1rem)] max-w-md bg-surface/80 backdrop-blur-md border border-glass-border rounded-2xl z-50 flex justify-around items-center py-2 px-2 shadow-2xl">
     <a href="/about" class="nav-link flex flex-col items-center gap-1 text-on-surface-variant hover:text-cyber-lime transition-colors p-2">
         <span class="material-symbols-outlined text-[20px]">person</span>
         <span class="font-label-caps text-[9px] font-bold">ABOUT</span>
@@ -235,10 +232,6 @@
         <span class="material-symbols-outlined text-[20px]">auto_stories</span>
         <span class="font-label-caps text-[9px] font-bold">BLOG</span>
     </a>
-    <a href="/admin/blog" class="nav-link flex flex-col items-center gap-1 text-on-surface-variant hover:text-cyber-lime transition-colors p-2">
-        <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
-        <span class="font-label-caps text-[9px] font-bold">ADMIN</span>
-    </a>
     <a href="/skill" class="nav-link flex flex-col items-center gap-1 text-on-surface-variant hover:text-cyber-lime transition-colors p-2">
         <span class="material-symbols-outlined text-[20px]">psychology</span>
         <span class="font-label-caps text-[9px] font-bold">SKILL</span>
@@ -250,7 +243,7 @@
 </div>
 
 <!-- Main Content Area -->
-<main class="flex-grow pt-[100px] md:pt-[120px] pb-[100px] md:pb-margin-lg px-4 md:px-margin-md max-w-container-max mx-auto w-full flex flex-col justify-center relative z-10 min-h-[80vh]">
+<main class="flex-grow pt-[92px] sm:pt-[96px] md:pt-[120px] pb-[128px] md:pb-margin-lg px-3 sm:px-4 md:px-margin-md max-w-container-max mx-auto w-full flex flex-col justify-center relative z-10 min-h-[80vh]">
     
     <!-- Home View -->
     <div id="view-home" class="page-view flex flex-col items-center justify-center text-center relative z-10 transition-opacity duration-300 opacity-100">
@@ -544,18 +537,41 @@
 
     <!-- Blog Admin View -->
     <div id="view-admin-blog" class="page-view hidden transition-opacity duration-300 opacity-0 w-full max-w-6xl mx-auto">
-        <div class="grid gap-6 lg:grid-cols-[380px_1fr]">
+        <div class="grid gap-6 xl:grid-cols-[minmax(320px,400px)_1fr]">
             <section class="rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-6">
-                <h2 class="text-2xl font-headline-lg text-white">Blog Admin</h2>
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <h2 class="text-2xl font-headline-lg text-white">Blog Admin</h2>
+                        <p class="mt-1 text-sm text-on-surface-variant">Direct route only. Use this as a private editor, not a public nav item.</p>
+                    </div>
+                    <button type="button" id="admin-new-post" class="rounded-lg border border-glass-border px-3 py-2 text-xs text-white hover:text-cyber-lime transition-colors">New post</button>
+                </div>
                 <form id="blog-admin-form" class="mt-5 space-y-4">
-                    <input name="slug" placeholder="slug" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
-                    <input name="title" placeholder="title" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
-                    <textarea name="excerpt" placeholder="excerpt" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white min-h-24"></textarea>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input name="slug" placeholder="slug" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                        <input name="title" placeholder="title" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                    </div>
+                    <textarea name="excerpt" placeholder="excerpt" class="w-full rounded-xl bg-black/20 border border-glass-border px-3 py-2 text-white min-h-24"></textarea>
                     <input name="coverImageUrl" placeholder="cover image URL" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
-                    <textarea name="contentMarkdown" placeholder="markdown content" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white min-h-40"></textarea>
-                    <textarea name="contentHtml" placeholder="HTML content" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white min-h-32"></textarea>
+                    <div class="rounded-2xl border border-glass-border bg-black/10 p-3 md:p-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                            <div>
+                                <div class="text-sm font-medium text-white">Content Blocks</div>
+                                <div class="text-xs text-on-surface-variant">Add paragraphs, images, code samples, quotes, and links.</div>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" class="admin-block-add rounded-lg border border-glass-border px-3 py-2 text-xs text-white hover:text-cyber-lime transition-colors" data-block-type="paragraph">Paragraph</button>
+                                <button type="button" class="admin-block-add rounded-lg border border-glass-border px-3 py-2 text-xs text-white hover:text-cyber-lime transition-colors" data-block-type="heading">Heading</button>
+                                <button type="button" class="admin-block-add rounded-lg border border-glass-border px-3 py-2 text-xs text-white hover:text-cyber-lime transition-colors" data-block-type="image">Image</button>
+                                <button type="button" class="admin-block-add rounded-lg border border-glass-border px-3 py-2 text-xs text-white hover:text-cyber-lime transition-colors" data-block-type="code">Code</button>
+                                <button type="button" class="admin-block-add rounded-lg border border-glass-border px-3 py-2 text-xs text-white hover:text-cyber-lime transition-colors" data-block-type="quote">Quote</button>
+                                <button type="button" class="admin-block-add rounded-lg border border-glass-border px-3 py-2 text-xs text-white hover:text-cyber-lime transition-colors" data-block-type="link">Link</button>
+                            </div>
+                        </div>
+                        <div id="admin-block-editor" class="space-y-3"></div>
+                    </div>
                     <input name="tags" placeholder="tags comma separated" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <select name="status" class="rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white">
                             <option value="draft">draft</option>
                             <option value="published">published</option>
@@ -564,10 +580,21 @@
                         <input name="readingTimeMinutes" type="number" min="1" value="2" class="rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
                     </div>
                     <input name="publishedAt" type="datetime-local" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                    <textarea name="contentMarkdown" class="hidden" aria-hidden="true"></textarea>
+                    <textarea name="contentHtml" class="hidden" aria-hidden="true"></textarea>
                     <button type="submit" class="w-full rounded-lg bg-primary text-on-primary px-4 py-3 font-medium">Save Post</button>
                 </form>
             </section>
-            <section class="space-y-4">
+            <section class="space-y-4 min-w-0">
+                <div class="rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-6">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <div class="text-xs uppercase tracking-[0.2em] text-primary-fixed-dim">Preview rules</div>
+                            <h3 class="text-xl font-headline-lg text-white">Responsive checks</h3>
+                        </div>
+                        <div class="text-sm text-on-surface-variant">Header wraps, content stacks, and post cards compress on tablet/mobile.</div>
+                    </div>
+                </div>
                 <div id="blog-admin-status" class="text-sm text-on-surface-variant"></div>
                 <div id="blog-admin-list" class="grid gap-4"></div>
             </section>
@@ -651,6 +678,8 @@
     const BLOG_API_BASE = window.BLOG_API_BASE || window.__BLOG_API_BASE__ || 'https://blog-api.verbaa.pp.ua';
     const adminPostsBySlug = new Map();
     let adminEditingSlug = '';
+    let adminBlocks = [];
+    let adminBlockIdCounter = 0;
 
     function getAdminKey() {
         return localStorage.getItem('blog_admin_key') || '';
@@ -783,6 +812,207 @@
             .replace(/'/g, '&#39;');
     }
 
+    function escapeAttribute(text) {
+        return escapeHtml(text).replace(/`/g, '&#96;');
+    }
+
+    function createBlock(type, data = {}) {
+        adminBlockIdCounter += 1;
+        return {
+            id: `block-${Date.now()}-${adminBlockIdCounter}`,
+            type,
+            data
+        };
+    }
+
+    function normalizeBlockData(type, data = {}) {
+        const value = (data && typeof data === 'object' && !Array.isArray(data)) ? data : {};
+        if (type === 'heading') {
+            return {
+                level: Math.min(4, Math.max(1, Number(value.level || 2))),
+                text: String(value.text || '')
+            };
+        }
+        if (type === 'image') {
+            return {
+                url: String(value.url || ''),
+                alt: String(value.alt || ''),
+                caption: String(value.caption || '')
+            };
+        }
+        if (type === 'code') {
+            return {
+                language: String(value.language || 'python'),
+                code: String(value.code || '')
+            };
+        }
+        if (type === 'quote') {
+            return {
+                text: String(value.text || ''),
+                cite: String(value.cite || '')
+            };
+        }
+        if (type === 'link') {
+            return {
+                label: String(value.label || ''),
+                url: String(value.url || '')
+            };
+        }
+        return {
+            text: String(value.text || '')
+        };
+    }
+
+    function sanitizeBlocks(blocks) {
+        return (Array.isArray(blocks) ? blocks : [])
+            .map((block, index) => {
+                if (!block || typeof block !== 'object') return null;
+                const type = String(block.type || '').trim();
+                if (!type) return null;
+                return {
+                    id: String(block.id || `block-${index + 1}`),
+                    type,
+                    data: normalizeBlockData(type, block.data)
+                };
+            })
+            .filter(Boolean);
+    }
+
+    function blockToMarkdown(block) {
+        const data = normalizeBlockData(block.type, block.data);
+        if (block.type === 'heading') return `${'#'.repeat(Math.max(1, Math.min(4, Number(data.level || 2))))} ${data.text}`.trim();
+        if (block.type === 'image') return `![${data.alt || ''}](${data.url || ''})${data.caption ? `\n\n_${data.caption}_` : ''}`;
+        if (block.type === 'code') return `\`\`\`${data.language || ''}\n${data.code || ''}\n\`\`\``;
+        if (block.type === 'quote') return `> ${String(data.text || '').replace(/\n/g, '\n> ')}${data.cite ? `\n>\n> — ${data.cite}` : ''}`;
+        if (block.type === 'link') return `[${data.label || data.url || 'link'}](${data.url || '#'})`;
+        return data.text || '';
+    }
+
+    function blockToHtml(block) {
+        const data = normalizeBlockData(block.type, block.data);
+        if (block.type === 'heading') {
+            const level = Math.max(1, Math.min(4, Number(data.level || 2)));
+            const sizeClass = level === 1 ? 'text-3xl' : level === 2 ? 'text-2xl' : level === 3 ? 'text-xl' : 'text-lg';
+            return `<h${level} class="text-white font-headline-lg ${sizeClass}">${escapeHtml(data.text || '')}</h${level}>`;
+        }
+        if (block.type === 'image') {
+            return `
+                <figure class="space-y-2">
+                    <img src="${escapeAttribute(data.url || '')}" alt="${escapeAttribute(data.alt || '')}" class="w-full rounded-2xl border border-glass-border object-cover">
+                    ${data.caption ? `<figcaption class="text-sm text-on-surface-variant">${escapeHtml(data.caption)}</figcaption>` : ''}
+                </figure>
+            `;
+        }
+        if (block.type === 'code') {
+            return `
+                <figure class="space-y-2">
+                    <div class="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-primary-fixed-dim">
+                        <span>${escapeHtml(data.language || 'code')}</span>
+                        <span>Code sample</span>
+                    </div>
+                    <pre class="overflow-x-auto rounded-2xl border border-glass-border bg-surface-charcoal/80 p-4 text-sm text-white"><code>${escapeHtml(data.code || '')}</code></pre>
+                </figure>
+            `;
+        }
+        if (block.type === 'quote') {
+            return `
+                <blockquote class="rounded-2xl border-l-4 border-cyber-lime bg-white/5 p-5 text-white">
+                    <p class="text-base md:text-lg leading-relaxed">${escapeHtml(data.text || '')}</p>
+                    ${data.cite ? `<footer class="mt-3 text-sm text-on-surface-variant">— ${escapeHtml(data.cite)}</footer>` : ''}
+                </blockquote>
+            `;
+        }
+        if (block.type === 'link') {
+            return `
+                <a class="inline-flex items-center gap-2 rounded-full border border-glass-border px-4 py-2 text-sm text-white hover:text-cyber-lime transition-colors" href="${escapeAttribute(data.url || '#')}" target="_blank" rel="noopener noreferrer">
+                    <span>${escapeHtml(data.label || data.url || 'Link')}</span>
+                    <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                </a>
+            `;
+        }
+        return `<p class="text-on-surface-variant leading-relaxed whitespace-pre-line">${escapeHtml(data.text || '')}</p>`;
+    }
+
+    function blocksToHtml(blocks) {
+        const content = sanitizeBlocks(blocks).map(blockToHtml).join('');
+        return content || '<p class="text-on-surface-variant">No content blocks yet.</p>';
+    }
+
+    function blocksToMarkdown(blocks) {
+        return sanitizeBlocks(blocks).map(blockToMarkdown).join('\n\n');
+    }
+
+    function renderBlockEditor(blocks) {
+        const editor = document.getElementById('admin-block-editor');
+        if (!editor) return;
+
+        if (!adminBlocks.length) {
+            adminBlocks = sanitizeBlocks(blocks).length ? sanitizeBlocks(blocks) : [createBlock('paragraph', { text: '' })];
+        }
+
+        editor.innerHTML = adminBlocks.map((block, index) => {
+            const data = normalizeBlockData(block.type, block.data);
+            const moveUpDisabled = index === 0 ? 'disabled' : '';
+            const moveDownDisabled = index === adminBlocks.length - 1 ? 'disabled' : '';
+            return `
+                <div class="rounded-2xl border border-glass-border bg-surface-container/50 p-3 md:p-4 space-y-3" data-block-id="${escapeAttribute(block.id)}">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <select data-block-field="type" class="rounded-lg bg-black/20 border border-glass-border px-2 py-1.5 text-xs text-white">
+                                <option value="paragraph" ${block.type === 'paragraph' ? 'selected' : ''}>Paragraph</option>
+                                <option value="heading" ${block.type === 'heading' ? 'selected' : ''}>Heading</option>
+                                <option value="image" ${block.type === 'image' ? 'selected' : ''}>Image</option>
+                                <option value="code" ${block.type === 'code' ? 'selected' : ''}>Code</option>
+                                <option value="quote" ${block.type === 'quote' ? 'selected' : ''}>Quote</option>
+                                <option value="link" ${block.type === 'link' ? 'selected' : ''}>Link</option>
+                            </select>
+                            <span class="text-[11px] uppercase tracking-[0.18em] text-on-surface-variant">${escapeHtml(block.id)}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" class="admin-block-move rounded-lg border border-glass-border px-2.5 py-1.5 text-[11px] text-white" data-direction="-1" ${moveUpDisabled}>Up</button>
+                            <button type="button" class="admin-block-move rounded-lg border border-glass-border px-2.5 py-1.5 text-[11px] text-white" data-direction="1" ${moveDownDisabled}>Down</button>
+                            <button type="button" class="admin-block-remove rounded-lg border border-glass-border px-2.5 py-1.5 text-[11px] text-red-200">Remove</button>
+                        </div>
+                    </div>
+                    ${block.type === 'heading' ? `
+                        <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-2">
+                            <input data-block-field="level" type="number" min="1" max="4" value="${escapeAttribute(String(data.level || 2))}" class="rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                            <input data-block-field="text" value="${escapeAttribute(data.text || '')}" placeholder="Heading text" class="rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                        </div>
+                    ` : ''}
+                    ${block.type === 'paragraph' ? `
+                        <textarea data-block-field="text" placeholder="Paragraph text" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white min-h-24">${escapeHtml(data.text || '')}</textarea>
+                    ` : ''}
+                    ${block.type === 'image' ? `
+                        <div class="space-y-2">
+                            <input data-block-field="url" value="${escapeAttribute(data.url || '')}" placeholder="Image URL" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <input data-block-field="alt" value="${escapeAttribute(data.alt || '')}" placeholder="Alt text" class="rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                                <input data-block-field="caption" value="${escapeAttribute(data.caption || '')}" placeholder="Caption" class="rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${block.type === 'code' ? `
+                        <div class="grid grid-cols-1 md:grid-cols-[140px_1fr] gap-2">
+                            <input data-block-field="language" value="${escapeAttribute(data.language || 'python')}" placeholder="Language" class="rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                            <textarea data-block-field="code" placeholder="Code sample" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white min-h-32">${escapeHtml(data.code || '')}</textarea>
+                        </div>
+                    ` : ''}
+                    ${block.type === 'quote' ? `
+                        <textarea data-block-field="text" placeholder="Quote text" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white min-h-24">${escapeHtml(data.text || '')}</textarea>
+                        <input data-block-field="cite" value="${escapeAttribute(data.cite || '')}" placeholder="Citation or source" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                    ` : ''}
+                    ${block.type === 'link' ? `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <input data-block-field="label" value="${escapeAttribute(data.label || '')}" placeholder="Link label" class="rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                            <input data-block-field="url" value="${escapeAttribute(data.url || '')}" placeholder="URL" class="rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+    }
+
     function toDateTimeLocalValue(isoString) {
         if (!isoString) return '';
         const date = new Date(isoString);
@@ -795,6 +1025,7 @@
         const form = document.getElementById('blog-admin-form');
         if (!form) return;
         adminEditingSlug = '';
+        adminBlocks = [createBlock('paragraph', { text: '' })];
         form.dataset.editingSlug = '';
         form.reset();
         form.elements.status.value = 'draft';
@@ -803,6 +1034,7 @@
         form.elements.slug.placeholder = 'slug';
         const submit = form.querySelector('button[type="submit"]');
         if (submit) submit.textContent = 'Save Post';
+        renderBlockEditor(adminBlocks);
     }
 
     function fillAdminForm(post) {
@@ -810,12 +1042,13 @@
         if (!form || !post) return;
         adminEditingSlug = post.slug;
         form.dataset.editingSlug = post.slug;
+        adminBlocks = sanitizeBlocks(post.contentBlocks && post.contentBlocks.length ? post.contentBlocks : [
+            createBlock('paragraph', { text: post.contentMarkdown || post.excerpt || '' })
+        ]);
         form.elements.slug.value = post.slug || '';
         form.elements.title.value = post.title || '';
         form.elements.excerpt.value = post.excerpt || '';
         form.elements.coverImageUrl.value = post.coverImageUrl || '';
-        form.elements.contentMarkdown.value = post.contentMarkdown || '';
-        form.elements.contentHtml.value = post.contentHtml || '';
         form.elements.tags.value = (post.tags || []).join(', ');
         form.elements.status.value = post.status || 'draft';
         form.elements.readingTimeMinutes.value = post.readingTimeMinutes || 1;
@@ -826,6 +1059,7 @@
         if (submit) submit.textContent = 'Update Post';
         setAdminStatus(`Editing ${post.slug}`);
         form.elements.title.focus();
+        renderBlockEditor(adminBlocks);
     }
 
     function renderAdminPostCard(post) {
@@ -923,7 +1157,7 @@
             </header>
             <section class="rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-8 space-y-4">
                 <div class="space-y-4 text-on-surface-variant leading-relaxed">
-                    ${post.contentHtml || `<p>${escapeHtml(post.contentMarkdown || '')}</p>`}
+                    ${post.contentBlocks && post.contentBlocks.length ? blocksToHtml(post.contentBlocks) : (post.contentHtml || `<p>${escapeHtml(post.contentMarkdown || '')}</p>`)}
                 </div>
             </section>
             <div class="flex flex-wrap gap-3">
@@ -1018,8 +1252,6 @@
         const title = form.elements.title.value.trim();
         const excerpt = form.elements.excerpt.value.trim();
         const coverImageUrl = form.elements.coverImageUrl.value.trim();
-        const contentMarkdown = form.elements.contentMarkdown.value.trim();
-        const contentHtml = form.elements.contentHtml.value.trim();
         const status = form.elements.status.value;
         const readingTimeMinutes = Number(form.elements.readingTimeMinutes.value || 1);
         const publishedAtValue = form.elements.publishedAt.value;
@@ -1027,6 +1259,9 @@
             .split(',')
             .map((tag) => tag.trim())
             .filter(Boolean);
+        const contentBlocks = sanitizeBlocks(adminBlocks);
+        const contentMarkdown = blocksToMarkdown(contentBlocks);
+        const contentHtml = blocksToHtml(contentBlocks);
 
         if (!slug || !title) {
             setAdminStatus('Slug and title are required.', true);
@@ -1040,6 +1275,7 @@
             coverImageUrl: coverImageUrl || null,
             contentMarkdown,
             contentHtml,
+            contentBlocks,
             status,
             readingTimeMinutes: Number.isFinite(readingTimeMinutes) ? readingTimeMinutes : 1,
             publishedAt: publishedAtValue ? new Date(publishedAtValue).toISOString() : null,
@@ -1065,6 +1301,48 @@
     });
 
     document.addEventListener('click', async (event) => {
+        const newPostButton = event.target.closest('#admin-new-post');
+        if (newPostButton) {
+            resetAdminForm();
+            setAdminStatus('Creating new draft post.');
+            return;
+        }
+
+        const addBlockButton = event.target.closest('.admin-block-add');
+        if (addBlockButton) {
+            const type = addBlockButton.getAttribute('data-block-type');
+            if (!type) return;
+            adminBlocks.push(createBlock(type, normalizeBlockData(type)));
+            renderBlockEditor(adminBlocks);
+            return;
+        }
+
+        const removeBlockButton = event.target.closest('.admin-block-remove');
+        if (removeBlockButton) {
+            const blockEl = removeBlockButton.closest('[data-block-id]');
+            const blockId = blockEl?.getAttribute('data-block-id');
+            adminBlocks = adminBlocks.filter((block) => block.id !== blockId);
+            if (!adminBlocks.length) adminBlocks = [createBlock('paragraph', { text: '' })];
+            renderBlockEditor(adminBlocks);
+            return;
+        }
+
+        const moveBlockButton = event.target.closest('.admin-block-move');
+        if (moveBlockButton) {
+            const blockEl = moveBlockButton.closest('[data-block-id]');
+            const blockId = blockEl?.getAttribute('data-block-id');
+            const direction = Number(moveBlockButton.getAttribute('data-direction') || 0);
+            const currentIndex = adminBlocks.findIndex((block) => block.id === blockId);
+            const targetIndex = currentIndex + direction;
+            if (currentIndex < 0 || targetIndex < 0 || targetIndex >= adminBlocks.length) return;
+            const nextBlocks = [...adminBlocks];
+            const [item] = nextBlocks.splice(currentIndex, 1);
+            nextBlocks.splice(targetIndex, 0, item);
+            adminBlocks = nextBlocks;
+            renderBlockEditor(adminBlocks);
+            return;
+        }
+
         const actionButton = event.target.closest('[data-admin-action]');
         if (!actionButton) return;
 
@@ -1097,6 +1375,49 @@
             } catch (error) {
                 setAdminStatus(`Failed to delete post: ${error.message}`, true);
             }
+        }
+    });
+
+    document.addEventListener('input', (event) => {
+        const blockEl = event.target.closest('[data-block-id]');
+        const field = event.target.getAttribute('data-block-field');
+        if (!blockEl || !field) return;
+
+        const blockId = blockEl.getAttribute('data-block-id');
+        const index = adminBlocks.findIndex((block) => block.id === blockId);
+        if (index < 0) return;
+
+        const current = adminBlocks[index];
+        const nextBlocks = [...adminBlocks];
+        const nextData = normalizeBlockData(current.type, current.data);
+        const rawValue = event.target.value;
+        nextData[field] = field === 'level' ? Number(rawValue || 2) : rawValue;
+        nextBlocks[index] = {
+            ...current,
+            data: nextData
+        };
+        adminBlocks = nextBlocks;
+    });
+
+    document.addEventListener('change', (event) => {
+        const blockEl = event.target.closest('[data-block-id]');
+        const field = event.target.getAttribute('data-block-field');
+        if (!blockEl || !field) return;
+
+        const blockId = blockEl.getAttribute('data-block-id');
+        const index = adminBlocks.findIndex((block) => block.id === blockId);
+        if (index < 0) return;
+
+        const current = adminBlocks[index];
+        const nextBlocks = [...adminBlocks];
+        const type = event.target.value;
+        if (field === 'type' && type && type !== current.type) {
+            nextBlocks[index] = {
+                ...createBlock(type, normalizeBlockData(type)),
+                id: current.id
+            };
+            adminBlocks = nextBlocks;
+            renderBlockEditor(adminBlocks);
         }
     });
 
