@@ -195,6 +195,12 @@
         <a href="/project" class="nav-link flex items-center gap-1.5 font-label-caps text-on-surface-variant hover:text-cyber-lime transition-colors duration-300">
             <span class="material-symbols-outlined text-[18px]">work</span> PROJECT
         </a>
+        <a href="/blog" class="nav-link flex items-center gap-1.5 font-label-caps text-on-surface-variant hover:text-cyber-lime transition-colors duration-300">
+            <span class="material-symbols-outlined text-[18px]">auto_stories</span> BLOG
+        </a>
+        <a href="/admin/blog" class="nav-link flex items-center gap-1.5 font-label-caps text-on-surface-variant hover:text-cyber-lime transition-colors duration-300">
+            <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span> ADMIN
+        </a>
         <a href="/skill" class="nav-link flex items-center gap-1.5 font-label-caps text-on-surface-variant hover:text-cyber-lime transition-colors duration-300">
             <span class="material-symbols-outlined text-[18px]">psychology</span> SKILL
         </a>
@@ -224,6 +230,14 @@
     <a href="/project" class="nav-link flex flex-col items-center gap-1 text-on-surface-variant hover:text-cyber-lime transition-colors p-2">
         <span class="material-symbols-outlined text-[20px]">work</span>
         <span class="font-label-caps text-[9px] font-bold">PROJECT</span>
+    </a>
+    <a href="/blog" class="nav-link flex flex-col items-center gap-1 text-on-surface-variant hover:text-cyber-lime transition-colors p-2">
+        <span class="material-symbols-outlined text-[20px]">auto_stories</span>
+        <span class="font-label-caps text-[9px] font-bold">BLOG</span>
+    </a>
+    <a href="/admin/blog" class="nav-link flex flex-col items-center gap-1 text-on-surface-variant hover:text-cyber-lime transition-colors p-2">
+        <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+        <span class="font-label-caps text-[9px] font-bold">ADMIN</span>
     </a>
     <a href="/skill" class="nav-link flex flex-col items-center gap-1 text-on-surface-variant hover:text-cyber-lime transition-colors p-2">
         <span class="material-symbols-outlined text-[20px]">psychology</span>
@@ -486,6 +500,80 @@
         </div>
     </div>
 
+    <!-- Blog View -->
+    <div id="view-blog" class="page-view hidden transition-opacity duration-300 opacity-0 w-full max-w-6xl mx-auto">
+        <div class="relative overflow-hidden rounded-3xl border border-glass-border bg-gradient-to-br from-surface-container/80 to-surface-charcoal/80 backdrop-blur-xl p-5 md:p-8 mb-6 md:mb-8">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(189,255,0,0.12),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(57,146,255,0.14),transparent_38%)]"></div>
+            <div class="relative z-10 grid gap-8 md:grid-cols-[1.3fr_0.7fr] items-end">
+                <div class="space-y-4">
+                    <div class="inline-flex items-center gap-2 rounded-full border border-glass-border bg-black/20 px-3 py-1.5 text-[11px] md:text-xs font-code-sm uppercase tracking-[0.18em] text-cyber-lime">
+                        <span class="h-2 w-2 rounded-full bg-cyber-lime"></span>
+                        Blog endpoint powered by Postgres
+                    </div>
+                    <h2 class="font-display-lg text-4xl md:text-6xl text-white tracking-tight leading-tight">
+                        Notes, deep dives, and technical essays.
+                    </h2>
+                    <p class="max-w-2xl text-sm md:text-base text-on-surface-variant leading-relaxed">
+                        This section is fed by an API contract backed by PostgreSQL, so the layout can stay static while the content layer scales later.
+                    </p>
+                </div>
+                <div class="grid gap-3 md:justify-self-end md:text-right text-sm text-on-surface-variant">
+                    <div>
+                        <div class="font-code-sm text-[11px] uppercase tracking-[0.18em] text-primary-fixed-dim">Contract</div>
+                        <div class="text-white">GET /api/blog/posts</div>
+                    </div>
+                    <div>
+                        <div class="font-code-sm text-[11px] uppercase tracking-[0.18em] text-primary-fixed-dim">Detail</div>
+                        <div class="text-white">GET /api/blog/posts/:slug</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="blog-list-state" class="grid gap-4 md:gap-5"></div>
+        <div id="blog-list-loading" class="hidden text-sm text-on-surface-variant">Loading posts...</div>
+        <div id="blog-list-error" class="hidden text-sm text-error"></div>
+    </div>
+
+    <!-- Blog Detail View -->
+    <div id="view-blog-post" class="page-view hidden transition-opacity duration-300 opacity-0 w-full max-w-4xl mx-auto">
+        <div id="blog-post-loading" class="hidden text-sm text-on-surface-variant">Loading article...</div>
+        <div id="blog-post-error" class="hidden text-sm text-error"></div>
+        <article id="blog-post-state" class="hidden space-y-6"></article>
+    </div>
+
+    <!-- Blog Admin View -->
+    <div id="view-admin-blog" class="page-view hidden transition-opacity duration-300 opacity-0 w-full max-w-6xl mx-auto">
+        <div class="grid gap-6 lg:grid-cols-[380px_1fr]">
+            <section class="rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-6">
+                <h2 class="text-2xl font-headline-lg text-white">Blog Admin</h2>
+                <form id="blog-admin-form" class="mt-5 space-y-4">
+                    <input name="slug" placeholder="slug" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                    <input name="title" placeholder="title" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                    <textarea name="excerpt" placeholder="excerpt" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white min-h-24"></textarea>
+                    <input name="coverImageUrl" placeholder="cover image URL" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                    <textarea name="contentMarkdown" placeholder="markdown content" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white min-h-40"></textarea>
+                    <textarea name="contentHtml" placeholder="HTML content" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white min-h-32"></textarea>
+                    <input name="tags" placeholder="tags comma separated" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                    <div class="grid grid-cols-2 gap-3">
+                        <select name="status" class="rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white">
+                            <option value="draft">draft</option>
+                            <option value="published">published</option>
+                            <option value="archived">archived</option>
+                        </select>
+                        <input name="readingTimeMinutes" type="number" min="1" value="2" class="rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                    </div>
+                    <input name="publishedAt" type="datetime-local" class="w-full rounded-lg bg-black/20 border border-glass-border px-3 py-2 text-white" />
+                    <button type="submit" class="w-full rounded-lg bg-primary text-on-primary px-4 py-3 font-medium">Save Post</button>
+                </form>
+            </section>
+            <section class="space-y-4">
+                <div id="blog-admin-status" class="text-sm text-on-surface-variant"></div>
+                <div id="blog-admin-list" class="grid gap-4"></div>
+            </section>
+        </div>
+    </div>
+
     <!-- Contact View -->
     <div id="view-contact" class="page-view hidden transition-opacity duration-300 opacity-0 w-full max-w-3xl mx-auto">
         <div class="bg-surface-container/40 backdrop-blur-md border border-glass-border rounded-xl p-5 md:p-8 bento-hover transition-all duration-300 flex flex-col items-center justify-center relative overflow-hidden group">
@@ -560,6 +648,66 @@
 </footer>
 
 <script>
+    const BLOG_API_BASE = window.BLOG_API_BASE || window.__BLOG_API_BASE__ || 'https://blog-api.verbaa.pp.ua';
+    const adminPostsBySlug = new Map();
+    let adminEditingSlug = '';
+
+    function getAdminKey() {
+        return localStorage.getItem('blog_admin_key') || '';
+    }
+
+    function setAdminStatus(message, isError = false) {
+        const status = document.getElementById('blog-admin-status');
+        if (!status) return;
+        status.textContent = message || '';
+        status.className = isError ? 'text-sm text-error' : 'text-sm text-on-surface-variant';
+    }
+
+    async function apiRequest(path, options = {}) {
+        const headers = new Headers(options.headers || {});
+        const adminKey = getAdminKey();
+        const hasBody = options.body !== undefined && options.body !== null;
+
+        if (adminKey) {
+            headers.set('x-admin-key', adminKey);
+        }
+
+        if (hasBody && !(options.body instanceof FormData) && !(options.body instanceof Blob) && !headers.has('Content-Type')) {
+            headers.set('Content-Type', 'application/json');
+        }
+
+        const requestOptions = {
+            ...options,
+            headers
+        };
+
+        if (hasBody && !(options.body instanceof FormData) && !(options.body instanceof Blob) && typeof options.body !== 'string') {
+            requestOptions.body = JSON.stringify(options.body);
+        }
+
+        const response = await fetch(`${BLOG_API_BASE}${path}`, requestOptions);
+        if (!response.ok) {
+            let message = `HTTP ${response.status}`;
+            try {
+                const errorText = await response.text();
+                if (errorText) {
+                    try {
+                        const errorBody = JSON.parse(errorText);
+                        message = errorBody.error || errorBody.message || message;
+                    } catch (_parseError) {
+                        message = errorText;
+                    }
+                }
+            } catch (_error) {
+                // Fall back to the default HTTP status message.
+            }
+            throw new Error(message);
+        }
+
+        if (response.status === 204) return null;
+        return response.json();
+    }
+
     // SPA Routing Logic
     function handleRoute() {
         const path = window.location.pathname;
@@ -575,6 +723,9 @@
         if (path === '/about' || window.location.hash === '#about') targetId = 'view-about';
         else if (path === '/education' || window.location.hash === '#education') targetId = 'view-education';
         else if (path === '/project' || window.location.hash === '#project') targetId = 'view-project';
+        else if (path === '/blog' || window.location.hash === '#blog') targetId = 'view-blog';
+        else if (path === '/admin/blog') targetId = 'view-admin-blog';
+        else if (path.startsWith('/blog/')) targetId = 'view-blog-post';
         else if (path === '/skill' || window.location.hash === '#skill') targetId = 'view-skill';
         else if (path === '/contact' || window.location.hash === '#contact') targetId = 'view-contact';
 
@@ -585,6 +736,16 @@
             void targetView.offsetWidth;
             targetView.classList.remove('opacity-0');
             targetView.classList.add('opacity-100');
+        }
+
+        if (path === '/blog') {
+            loadBlogList();
+        } else if (path === '/admin/blog') {
+            resetAdminForm();
+            loadAdminPosts();
+        } else if (path.startsWith('/blog/')) {
+            const slug = path.replace('/blog/', '').replace(/\/$/, '');
+            if (slug) loadBlogPost(slug);
         }
     }
 
@@ -604,8 +765,340 @@
     window.addEventListener('hashchange', handleRoute);
     document.addEventListener('DOMContentLoaded', handleRoute);
 
+    function formatDate(isoString) {
+        if (!isoString) return 'Draft';
+        return new Intl.DateTimeFormat('en', {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric'
+        }).format(new Date(isoString));
+    }
+
+    function escapeHtml(text) {
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function toDateTimeLocalValue(isoString) {
+        if (!isoString) return '';
+        const date = new Date(isoString);
+        if (Number.isNaN(date.getTime())) return '';
+        const offset = date.getTimezoneOffset() * 60000;
+        return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+    }
+
+    function resetAdminForm() {
+        const form = document.getElementById('blog-admin-form');
+        if (!form) return;
+        adminEditingSlug = '';
+        form.dataset.editingSlug = '';
+        form.reset();
+        form.elements.status.value = 'draft';
+        form.elements.readingTimeMinutes.value = '2';
+        form.elements.slug.readOnly = false;
+        form.elements.slug.placeholder = 'slug';
+        const submit = form.querySelector('button[type="submit"]');
+        if (submit) submit.textContent = 'Save Post';
+    }
+
+    function fillAdminForm(post) {
+        const form = document.getElementById('blog-admin-form');
+        if (!form || !post) return;
+        adminEditingSlug = post.slug;
+        form.dataset.editingSlug = post.slug;
+        form.elements.slug.value = post.slug || '';
+        form.elements.title.value = post.title || '';
+        form.elements.excerpt.value = post.excerpt || '';
+        form.elements.coverImageUrl.value = post.coverImageUrl || '';
+        form.elements.contentMarkdown.value = post.contentMarkdown || '';
+        form.elements.contentHtml.value = post.contentHtml || '';
+        form.elements.tags.value = (post.tags || []).join(', ');
+        form.elements.status.value = post.status || 'draft';
+        form.elements.readingTimeMinutes.value = post.readingTimeMinutes || 1;
+        form.elements.publishedAt.value = toDateTimeLocalValue(post.publishedAt);
+        form.elements.slug.readOnly = true;
+        form.elements.slug.placeholder = 'slug (locked while editing)';
+        const submit = form.querySelector('button[type="submit"]');
+        if (submit) submit.textContent = 'Update Post';
+        setAdminStatus(`Editing ${post.slug}`);
+        form.elements.title.focus();
+    }
+
+    function renderAdminPostCard(post) {
+        const tags = (post.tags || []).map((tag) => `<span class="rounded-full bg-white/5 px-2.5 py-1 text-[11px] font-code-sm text-white/80">${escapeHtml(tag)}</span>`).join('');
+        return `
+            <article class="rounded-2xl border border-glass-border bg-surface-container/40 p-4 md:p-5" data-admin-post-card="${escapeHtml(post.slug)}">
+                <div class="flex flex-wrap items-start justify-between gap-3">
+                    <div class="space-y-2">
+                        <div class="flex flex-wrap items-center gap-2 text-[11px] font-code-sm uppercase tracking-[0.18em]">
+                            <span class="rounded-full border border-glass-border px-2.5 py-1 text-cyber-lime">${escapeHtml(post.status)}</span>
+                            <span class="text-on-surface-variant">${escapeHtml(formatDate(post.publishedAt))}</span>
+                            <span class="text-on-surface-variant">${escapeHtml(post.readingTimeMinutes)} min read</span>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-headline-lg text-white">${escapeHtml(post.title)}</h3>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">${escapeHtml(post.excerpt)}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" data-admin-action="edit" data-admin-slug="${escapeHtml(post.slug)}" class="rounded-lg border border-glass-border px-3 py-2 text-xs text-white hover:text-cyber-lime transition-colors">Edit</button>
+                        <button type="button" data-admin-action="delete" data-admin-slug="${escapeHtml(post.slug)}" class="rounded-lg border border-glass-border px-3 py-2 text-xs text-white hover:text-red-300 transition-colors">Delete</button>
+                    </div>
+                </div>
+                <div class="mt-3 flex flex-wrap gap-2">
+                    ${tags}
+                </div>
+            </article>
+        `;
+    }
+
+    function renderAdminPostGroups(groups) {
+        const list = document.getElementById('blog-admin-list');
+        if (!list) return;
+
+        const sections = ['published', 'draft'].map((status) => {
+            const items = groups[status] || [];
+            return `
+                <section class="space-y-3">
+                    <div class="flex items-center justify-between gap-3">
+                        <h3 class="text-sm font-code-sm uppercase tracking-[0.18em] text-on-surface-variant">${status}</h3>
+                        <span class="text-xs text-on-surface-variant">${items.length} posts</span>
+                    </div>
+                    <div class="space-y-3">
+                        ${items.length ? items.map(renderAdminPostCard).join('') : '<div class="rounded-2xl border border-glass-border bg-surface-container/30 p-5 text-sm text-on-surface-variant">No posts in this state.</div>'}
+                    </div>
+                </section>
+            `;
+        });
+
+        list.innerHTML = sections.join('');
+    }
+
+    function renderBlogList(items) {
+        const list = document.getElementById('blog-list-state');
+        if (!list) return;
+        if (!items.length) {
+            list.innerHTML = '<div class="rounded-2xl border border-glass-border bg-surface-container/40 p-6 text-sm text-on-surface-variant">No posts yet.</div>';
+            return;
+        }
+        list.innerHTML = items.map((post, index) => `
+            <a href="/blog/${post.slug}" class="group block rounded-2xl border border-glass-border bg-surface-container/40 p-5 md:p-6 transition-all duration-300 hover:border-primary/40 hover:bg-surface-container/70">
+                <div class="grid gap-4 md:grid-cols-[1fr_auto] md:items-start">
+                    <div class="space-y-3">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="rounded-full border border-glass-border px-2.5 py-1 text-[11px] font-code-sm uppercase tracking-[0.18em] text-cyber-lime">${escapeHtml(post.status)}</span>
+                            <span class="text-xs text-on-surface-variant">${escapeHtml(formatDate(post.publishedAt))}</span>
+                            <span class="text-xs text-on-surface-variant">${escapeHtml(post.readingTimeMinutes)} min read</span>
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-headline-lg text-white group-hover:text-cyber-lime transition-colors">${escapeHtml(post.title)}</h3>
+                        <p class="text-sm md:text-base text-on-surface-variant leading-relaxed max-w-3xl">${escapeHtml(post.excerpt)}</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 md:justify-end">
+                        ${(post.tags || []).slice(0, 3).map((tag) => `<span class="rounded-full bg-white/5 px-2.5 py-1 text-[11px] font-code-sm text-white/80">${escapeHtml(tag)}</span>`).join('')}
+                    </div>
+                </div>
+            </a>
+        `).join('');
+    }
+
+    function renderBlogPost(post) {
+        const state = document.getElementById('blog-post-state');
+        if (!state) return;
+        document.title = `${post.title} - Nguyen Nhat Bang`;
+        state.classList.remove('hidden');
+        state.innerHTML = `
+            <header class="space-y-4 rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-8">
+                <div class="flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
+                    <span class="rounded-full border border-glass-border px-2.5 py-1 font-code-sm uppercase tracking-[0.18em] text-cyber-lime">${escapeHtml(post.status)}</span>
+                    <span>${escapeHtml(formatDate(post.publishedAt))}</span>
+                    <span>${escapeHtml(post.readingTimeMinutes)} min read</span>
+                </div>
+                <h1 class="text-3xl md:text-5xl font-display-lg text-white tracking-tight leading-tight">${escapeHtml(post.title)}</h1>
+                <p class="text-base md:text-lg text-on-surface-variant leading-relaxed">${escapeHtml(post.excerpt)}</p>
+                <div class="flex flex-wrap gap-2">
+                    ${(post.tags || []).map((tag) => `<span class="rounded-full bg-white/5 px-3 py-1 text-xs text-white/80">${escapeHtml(tag)}</span>`).join('')}
+                </div>
+            </header>
+            <section class="rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-8 space-y-4">
+                <div class="space-y-4 text-on-surface-variant leading-relaxed">
+                    ${post.contentHtml || `<p>${escapeHtml(post.contentMarkdown || '')}</p>`}
+                </div>
+            </section>
+            <div class="flex flex-wrap gap-3">
+                <a href="/blog" class="rounded-lg border border-glass-border px-4 py-2 text-sm text-white hover:text-cyber-lime transition-colors">Back to blog</a>
+                <a href="/" class="rounded-lg border border-glass-border px-4 py-2 text-sm text-white hover:text-cyber-lime transition-colors">Home</a>
+            </div>
+        `;
+    }
+
+    async function loadBlogList() {
+        const loading = document.getElementById('blog-list-loading');
+        const error = document.getElementById('blog-list-error');
+        const list = document.getElementById('blog-list-state');
+        if (!loading || !error || !list) return;
+        loading.classList.remove('hidden');
+        error.classList.add('hidden');
+        try {
+            const response = await fetch(`${BLOG_API_BASE}/api/blog/posts?status=published&limit=20`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            renderBlogList(data.items || []);
+        } catch (err) {
+            error.textContent = `Failed to load blog posts from ${BLOG_API_BASE}.`;
+            error.classList.remove('hidden');
+            list.innerHTML = '';
+        } finally {
+            loading.classList.add('hidden');
+        }
+    }
+
+    async function loadBlogPost(slug) {
+        const loading = document.getElementById('blog-post-loading');
+        const error = document.getElementById('blog-post-error');
+        const state = document.getElementById('blog-post-state');
+        if (!loading || !error || !state) return;
+        loading.classList.remove('hidden');
+        error.classList.add('hidden');
+        state.classList.add('hidden');
+        try {
+            const response = await fetch(`${BLOG_API_BASE}/api/blog/posts/${encodeURIComponent(slug)}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            renderBlogPost(data.item);
+        } catch (err) {
+            error.textContent = `Failed to load article "${slug}".`;
+            error.classList.remove('hidden');
+            state.innerHTML = '';
+        } finally {
+            loading.classList.add('hidden');
+        }
+    }
+
+    async function loadAdminPosts() {
+        const list = document.getElementById('blog-admin-list');
+        if (!list) return;
+
+        setAdminStatus('Loading admin posts...');
+        list.innerHTML = '<div class="rounded-2xl border border-glass-border bg-surface-container/30 p-5 text-sm text-on-surface-variant">Loading posts...</div>';
+
+        try {
+            const [publishedResponse, draftResponse] = await Promise.all([
+                apiRequest('/api/blog/posts?status=published&limit=100'),
+                apiRequest('/api/blog/posts?status=draft&limit=100')
+            ]);
+
+            const published = publishedResponse.items || [];
+            const draft = draftResponse.items || [];
+
+            adminPostsBySlug.clear();
+            [...published, ...draft].forEach((post) => {
+                adminPostsBySlug.set(post.slug, post);
+            });
+
+            renderAdminPostGroups({ published, draft });
+            setAdminStatus(`Loaded ${published.length + draft.length} posts.`);
+        } catch (error) {
+            list.innerHTML = '';
+            setAdminStatus(`Failed to load admin posts: ${error.message}`, true);
+        }
+    }
+
     // Initial check in case script runs after DOMContentLoaded
     handleRoute();
+
+    document.addEventListener('submit', async (event) => {
+        const form = event.target.closest('#blog-admin-form');
+        if (!form) return;
+        event.preventDefault();
+
+        const editingSlug = form.dataset.editingSlug || '';
+        const slug = form.elements.slug.value.trim();
+        const title = form.elements.title.value.trim();
+        const excerpt = form.elements.excerpt.value.trim();
+        const coverImageUrl = form.elements.coverImageUrl.value.trim();
+        const contentMarkdown = form.elements.contentMarkdown.value.trim();
+        const contentHtml = form.elements.contentHtml.value.trim();
+        const status = form.elements.status.value;
+        const readingTimeMinutes = Number(form.elements.readingTimeMinutes.value || 1);
+        const publishedAtValue = form.elements.publishedAt.value;
+        const tags = form.elements.tags.value
+            .split(',')
+            .map((tag) => tag.trim())
+            .filter(Boolean);
+
+        if (!slug || !title) {
+            setAdminStatus('Slug and title are required.', true);
+            return;
+        }
+
+        const payload = {
+            slug,
+            title,
+            excerpt,
+            coverImageUrl: coverImageUrl || null,
+            contentMarkdown,
+            contentHtml,
+            status,
+            readingTimeMinutes: Number.isFinite(readingTimeMinutes) ? readingTimeMinutes : 1,
+            publishedAt: publishedAtValue ? new Date(publishedAtValue).toISOString() : null,
+            seoTitle: title,
+            seoDescription: excerpt,
+            tags
+        };
+
+        setAdminStatus(editingSlug ? 'Updating post...' : 'Creating post...');
+
+        try {
+            await apiRequest(editingSlug ? `/api/blog/posts/${encodeURIComponent(editingSlug)}` : '/api/blog/posts', {
+                method: editingSlug ? 'PUT' : 'POST',
+                body: payload
+            });
+
+            resetAdminForm();
+            await loadAdminPosts();
+            setAdminStatus('Saved post.');
+        } catch (error) {
+            setAdminStatus(`Failed to save post: ${error.message}`, true);
+        }
+    });
+
+    document.addEventListener('click', async (event) => {
+        const actionButton = event.target.closest('[data-admin-action]');
+        if (!actionButton) return;
+
+        const action = actionButton.getAttribute('data-admin-action');
+        const slug = actionButton.getAttribute('data-admin-slug');
+        const post = slug ? adminPostsBySlug.get(slug) : null;
+        if (!slug || !post) return;
+
+        if (action === 'edit') {
+            fillAdminForm(post);
+            return;
+        }
+
+        if (action === 'delete') {
+            const confirmed = window.confirm(`Delete "${post.title}"? This cannot be undone.`);
+            if (!confirmed) return;
+
+            setAdminStatus(`Deleting ${post.slug}...`);
+            try {
+                await apiRequest(`/api/blog/posts/${encodeURIComponent(post.slug)}`, {
+                    method: 'DELETE'
+                });
+
+                if (adminEditingSlug === post.slug) {
+                    resetAdminForm();
+                }
+
+                await loadAdminPosts();
+                setAdminStatus(`Deleted ${post.slug}.`);
+            } catch (error) {
+                setAdminStatus(`Failed to delete post: ${error.message}`, true);
+            }
+        }
+    });
 
     // Intersection Observer for scroll reveal
     const observerOptions = {

@@ -1,0 +1,22 @@
+[Unit]
+Description=Blog backend API
+After=network-online.target
+Wants=network-online.target
+PartOf=blog.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/nhatbang/nhatbang_web/Lilkremxxx.github.io
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/home/nhatbang/nhatbang_web/Lilkremxxx.github.io/.env
+ExecStart=/usr/bin/node /home/nhatbang/nhatbang_web/Lilkremxxx.github.io/server/index.js
+ExecReload=/bin/kill -TERM $MAINPID
+Restart=always
+RestartSec=2
+KillMode=mixed
+TimeoutStopSec=20
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,5 @@
+Project/
+**/.vs/
+**/node_modules/
+**/*.onnx
+**/*.keras
