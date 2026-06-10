@@ -1284,9 +1284,9 @@
             : `<span class="rounded-lg border border-glass-border px-4 py-2 text-sm text-on-surface-variant opacity-60">No next post</span>`;
 
         state.innerHTML = `
-            <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_340px] items-start">
+            <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_360px] items-start">
                 <article class="space-y-6 w-full">
-                    <header class="space-y-4 rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-8 blog-block w-full">
+                    <header class="space-y-4 border-b border-glass-border/70 pb-6 md:pb-8 w-full">
                         <div class="flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
                             <span class="rounded-full border border-glass-border px-2.5 py-1 font-code-sm uppercase tracking-[0.18em] text-cyber-lime">${escapeHtml(post.status)}</span>
                             <span>${escapeHtml(formatDate(post.publishedAt))}</span>
@@ -1298,8 +1298,8 @@
                             ${(post.tags || []).map((tag) => `<span class="rounded-full border border-glass-border bg-white/5 px-3 py-1 text-xs text-white/90">${escapeHtml(tag)}</span>`).join('')}
                         </div>
                     </header>
-                    <section class="space-y-4 rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-8 blog-block w-full">
-                        <div class="mx-auto max-w-none space-y-5 text-white/88 leading-relaxed text-left">
+                    <section class="space-y-4 w-full">
+                        <div class="mx-auto max-w-none space-y-5 text-white/90 leading-relaxed text-left">
                             ${bodyHtml}
                         </div>
                     </section>
@@ -1308,8 +1308,8 @@
                         ${nextButton}
                     </div>
                 </article>
-                <aside class="space-y-4 lg:sticky lg:top-28 w-full">
-                    <div class="rounded-3xl border border-glass-border bg-surface-container/60 p-5 md:p-6 blog-block shadow-[0_24px_70px_rgba(0,0,0,0.28)]">
+                <aside class="space-y-4 lg:sticky lg:top-24 w-full">
+                    <div class="rounded-3xl border border-glass-border bg-surface-container/70 p-5 md:p-6 shadow-[0_24px_70px_rgba(0,0,0,0.34)] backdrop-blur-md">
                         <div class="text-[11px] uppercase tracking-[0.22em] text-primary-fixed-dim">Table of contents</div>
                         <h2 class="mt-2 text-xl font-headline-lg text-white">Jump to section</h2>
                         <div class="mt-4 space-y-2">
@@ -1321,7 +1321,7 @@
                             `).join('') : '<div class="rounded-2xl border border-glass-border bg-white/5 p-4 text-sm text-on-surface-variant">No sections detected yet.</div>'}
                         </div>
                     </div>
-                    <div class="rounded-3xl border border-glass-border bg-surface-container/60 p-5 md:p-6 blog-block shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+                    <div class="rounded-3xl border border-glass-border bg-surface-container/50 p-5 md:p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
                         <div class="text-[11px] uppercase tracking-[0.22em] text-primary-fixed-dim">Reading mode</div>
                         <p class="mt-2 text-sm text-white/80 leading-relaxed">
                             Headings, code, images, and quotes are highlighted to keep the structure visually consistent with the paper-style writing.
