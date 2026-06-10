@@ -962,7 +962,7 @@
         return data.text || '';
     }
 
-    function blockToHtml(block) {
+    function blockToHtml(block, figureIndex = 0) {
         const data = normalizeBlockData(block.type, block.data);
         if (block.type === 'heading') {
             const level = Math.max(1, Math.min(4, Number(data.level || 2)));
@@ -973,7 +973,7 @@
             return `
                 <figure class="blog-block space-y-3 rounded-3xl p-3 md:p-4">
                     <img src="${escapeAttribute(data.url || '')}" alt="${escapeAttribute(data.alt || '')}" class="w-full rounded-2xl border border-glass-border object-cover">
-                    ${data.caption ? `<figcaption class="text-sm text-on-surface-variant">${escapeHtml(data.caption)}</figcaption>` : ''}
+                    ${data.caption ? `<figcaption class="text-sm text-on-surface-variant">${escapeHtml(`Figure ${figureIndex}. ${data.caption}`)}</figcaption>` : `<figcaption class="text-sm text-on-surface-variant">${escapeHtml(`Figure ${figureIndex}.`)}</figcaption>`}
                 </figure>
             `;
         }
@@ -1017,7 +1017,11 @@
     }
 
     function blocksToHtml(blocks) {
-        const content = sanitizeBlocks(blocks).map(blockToHtml).join('');
+        let figureCounter = 0;
+        const content = sanitizeBlocks(blocks).map((block) => {
+            const figureIndex = block.type === 'image' ? ++figureCounter : figureCounter;
+            return blockToHtml(block, figureIndex);
+        }).join('');
         return content || '<p class="text-on-surface-variant">No content blocks yet.</p>';
     }
 
@@ -1259,7 +1263,7 @@
                         </div>
                     </header>
                     <section class="space-y-4 rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-8 blog-block">
-                        <div class="space-y-5 text-white/88 leading-relaxed">
+                        <div class="mx-auto max-w-3xl space-y-5 text-white/88 leading-relaxed text-left">
                             ${bodyHtml}
                         </div>
                     </section>
