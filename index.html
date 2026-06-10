@@ -1053,7 +1053,7 @@
             const figureIndex = block.type === 'image' ? ++figureCounter : figureCounter;
             return blockToHtml(block, figureIndex);
         }).join('');
-        return content || '<p class="text-on-surface-variant">No content blocks yet.</p>';
+        return content || '<p class="text-white/80">No content blocks yet.</p>';
     }
 
     function blocksToMarkdown(blocks) {
@@ -1257,17 +1257,12 @@
 
     function buildBlogToc(blocks) {
         return sanitizeBlocks(blocks)
-            .filter((block) => block.type === 'heading' || block.type === 'image' || block.type === 'table')
+            .filter((block) => block.type === 'heading' && Number(normalizeBlockData(block.type, block.data).level || 2) <= 2)
             .map((block) => {
                 const data = normalizeBlockData(block.type, block.data);
-                const label = block.type === 'image'
-                    ? `Figure: ${data.caption || data.alt || 'Image'}`
-                    : block.type === 'table'
-                      ? `Table: ${data.title || 'Data table'}`
-                      : data.text || 'Section';
                 return {
                     id: block.id,
-                    label
+                    label: data.text || 'Section'
                 };
             });
     }
@@ -1299,7 +1294,7 @@
                         </div>
                     </header>
                     <section class="space-y-4 w-full">
-                        <div class="mx-auto max-w-none space-y-5 text-white/90 leading-relaxed text-left">
+                        <div class="mx-auto max-w-none space-y-6 text-white/92 leading-[1.85] text-left text-[16px] md:text-[17px]">
                             ${bodyHtml}
                         </div>
                     </section>
@@ -1309,7 +1304,7 @@
                     </div>
                 </article>
                 <aside class="space-y-4 lg:sticky lg:top-24 w-full">
-                    <div class="rounded-3xl border border-glass-border bg-surface-container/70 p-5 md:p-6 shadow-[0_24px_70px_rgba(0,0,0,0.34)] backdrop-blur-md">
+                    <div class="rounded-3xl border border-glass-border bg-surface-container/80 p-5 md:p-6 shadow-[0_24px_70px_rgba(0,0,0,0.34)] backdrop-blur-md">
                         <div class="text-[11px] uppercase tracking-[0.22em] text-primary-fixed-dim">Table of contents</div>
                         <h2 class="mt-2 text-xl font-headline-lg text-white">Jump to section</h2>
                         <div class="mt-4 space-y-2">
@@ -1389,6 +1384,18 @@
             const tocLinks = Array.from(document.querySelectorAll('[data-toc-link]'));
             const tocMap = new Map(tocLinks.map((link) => [link.getAttribute('data-toc-link'), link]));
             const headingEls = Array.from(document.querySelectorAll('#blog-post-state h2, #blog-post-state h3, #blog-post-state h4'));
+            tocLinks.forEach((link) => {
+                link.addEventListener('click', (ev) => {
+                    ev.preventDefault();
+                    const href = link.getAttribute('href') || '';
+                    const targetId = href.startsWith('#') ? href.slice(1) : '';
+                    const target = targetId ? document.getElementById(targetId) : null;
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        history.replaceState(null, '', `#${targetId}`);
+                    }
+                });
+            });
             const activateToc = (id) => {
                 tocLinks.forEach((link) => link.classList.remove('toc-active'));
                 const activeLink = tocMap.get(id);
@@ -1400,6 +1407,10 @@
                     if (visible?.target?.id) activateToc(visible.target.id);
                 }, { rootMargin: '-20% 0px -65% 0px', threshold: [0.2, 0.35, 0.5] });
                 headingEls.forEach((el) => observer.observe(el));
+                const hashTarget = window.location.hash ? document.getElementById(window.location.hash.slice(1)) : null;
+                if (hashTarget) {
+                    setTimeout(() => hashTarget.scrollIntoView({ behavior: 'auto', block: 'start' }), 50);
+                }
             }
         } catch (err) {
             error.textContent = `Failed to load article "${slug}".`;
