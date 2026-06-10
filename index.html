@@ -912,6 +912,31 @@
             .replace(/\\t/g, '\t');
     }
 
+    function highlightCode(text, language = '') {
+        const source = decodeCodeText(text);
+        const escaped = escapeHtml(source);
+        if (language.toLowerCase().includes('cpp') || language.toLowerCase().includes('c++')) {
+            return escaped
+                .replace(/\b(string|cout|cerr|endl|vector|map|unordered_map|const|auto|return|class|struct|if|else|for|while|switch|case|break|continue|void|int|double|float|bool|true|false)\b/g, '<span class="text-cyber-lime">$1</span>')
+                .replace(/"([^"]*)"/g, '<span class="text-amber-300">"$1"</span>')
+                .replace(/\/\/.*$/gm, '<span class="text-slate-400">$&</span>');
+        }
+        if (language.toLowerCase().includes('bash') || language.toLowerCase().includes('shell')) {
+            return escaped
+                .replace(/\b(python|pip|cd|git|curl|psql|node|npm|yarn|make|cmake|docker)\b/g, '<span class="text-cyber-lime">$1</span>')
+                .replace(/'([^']*)'/g, '<span class="text-amber-300">\'$1\'</span>')
+                .replace(/(^|\n)(\s*)([-]{1,2}[a-zA-Z0-9_-]+)/g, '$1$2<span class="text-primary">$3</span>');
+        }
+        if (language.toLowerCase().includes('python')) {
+            return escaped
+                .replace(/\b(def|class|import|from|return|if|elif|else|for|while|with|as|try|except|True|False|None|print)\b/g, '<span class="text-cyber-lime">$1</span>')
+                .replace(/"([^"]*)"/g, '<span class="text-amber-300">"$1"</span>')
+                .replace(/'([^']*)'/g, '<span class="text-amber-300">\'$1\'</span>')
+                .replace(/#.*$/gm, '<span class="text-slate-400">$&</span>');
+        }
+        return escaped;
+    }
+
     function sanitizeBlocks(blocks) {
         return (Array.isArray(blocks) ? blocks : [])
             .map((block, index) => {
@@ -954,12 +979,21 @@
         }
         if (block.type === 'code') {
             return `
-                <figure id="${escapeAttribute(block.id)}" class="blog-block space-y-3 rounded-3xl p-3 md:p-4">
-                    <div class="flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-primary-fixed-dim">
-                        <span>${escapeHtml(data.language || 'code')}</span>
-                        <span>Code sample</span>
+                <figure id="${escapeAttribute(block.id)}" class="blog-block overflow-hidden rounded-3xl">
+                    <div class="flex items-center justify-between border-b border-glass-border bg-[#1a1c23] px-4 py-3">
+                        <div class="flex items-center gap-2">
+                            <span class="h-3 w-3 rounded-full bg-[#ff5f57]"></span>
+                            <span class="h-3 w-3 rounded-full bg-[#febc2e]"></span>
+                            <span class="h-3 w-3 rounded-full bg-[#28c840]"></span>
+                        </div>
+                        <div class="text-[11px] uppercase tracking-[0.18em] text-primary-fixed-dim">${escapeHtml(data.language || 'code')}</div>
                     </div>
-                    <pre class="overflow-x-auto rounded-2xl border border-glass-border bg-surface-charcoal/90 p-4 md:p-5 text-sm md:text-[15px] text-white leading-relaxed"><code class="font-code-sm">${escapeHtml(decodeCodeText(data.code || ''))}</code></pre>
+                    <div class="grid grid-cols-[44px_1fr] bg-[#111318]">
+                        <div class="select-none border-r border-glass-border bg-[#0d0f14] px-3 py-4 text-right font-code-sm text-[12px] leading-6 text-slate-500">
+                            ${decodeCodeText(data.code || '').split('\n').map((_, index) => `<div>${index + 1}</div>`).join('')}
+                        </div>
+                        <pre class="overflow-x-auto px-4 py-4 md:px-5 md:py-5 text-sm md:text-[15px] leading-6 text-white"><code class="font-code-sm">${highlightCode(data.code || '', data.language || '')}</code></pre>
+                    </div>
                 </figure>
             `;
         }
