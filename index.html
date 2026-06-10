@@ -497,28 +497,12 @@
     <div id="view-blog" class="page-view hidden transition-opacity duration-300 opacity-0 w-full max-w-6xl mx-auto">
         <div class="relative overflow-hidden rounded-3xl border border-glass-border bg-gradient-to-br from-surface-container/80 to-surface-charcoal/80 backdrop-blur-xl p-5 md:p-8 mb-6 md:mb-8">
             <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(189,255,0,0.12),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(57,146,255,0.14),transparent_38%)]"></div>
-            <div class="relative z-10 grid gap-8 md:grid-cols-[1.3fr_0.7fr] items-end">
-                <div class="space-y-4">
-                    <div class="inline-flex items-center gap-2 rounded-full border border-glass-border bg-black/20 px-3 py-1.5 text-[11px] md:text-xs font-code-sm uppercase tracking-[0.18em] text-cyber-lime">
-                        <span class="h-2 w-2 rounded-full bg-cyber-lime"></span>
-                        Blog endpoint powered by Postgres
-                    </div>
+            <div class="relative z-10 min-h-[220px] md:min-h-[260px] flex items-center">
+                <div class="max-w-3xl space-y-4">
+                    <p class="text-xs md:text-sm font-code-sm uppercase tracking-[0.18em] text-cyber-lime">Blog</p>
                     <h2 class="font-display-lg text-4xl md:text-6xl text-white tracking-tight leading-tight">
-                        Notes, deep dives, and technical essays.
+                        Hi there, This is my blog
                     </h2>
-                    <p class="max-w-2xl text-sm md:text-base text-on-surface-variant leading-relaxed">
-                        This section is fed by an API contract backed by PostgreSQL, so the layout can stay static while the content layer scales later.
-                    </p>
-                </div>
-                <div class="grid gap-3 md:justify-self-end md:text-right text-sm text-on-surface-variant">
-                    <div>
-                        <div class="font-code-sm text-[11px] uppercase tracking-[0.18em] text-primary-fixed-dim">Contract</div>
-                        <div class="text-white">GET /api/blog/posts</div>
-                    </div>
-                    <div>
-                        <div class="font-code-sm text-[11px] uppercase tracking-[0.18em] text-primary-fixed-dim">Detail</div>
-                        <div class="text-white">GET /api/blog/posts/:slug</div>
-                    </div>
                 </div>
             </div>
         </div>
