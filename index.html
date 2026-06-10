@@ -171,6 +171,58 @@
             pointer-events: none;
             background: radial-gradient(circle at center, transparent 0%, rgba(19, 19, 19, 0.8) 100%);
         }
+
+        .blog-transition-enter {
+            opacity: 0;
+            transform: translateY(18px) scale(0.985);
+            filter: blur(4px);
+        }
+
+        .blog-transition-enter-active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+            transition: opacity 420ms ease, transform 420ms ease, filter 420ms ease;
+        }
+
+        .blog-transition-exit {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+
+        .blog-transition-exit-active {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.99);
+            filter: blur(3px);
+            transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease;
+        }
+
+        .blog-block {
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+
+        .blog-block::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, rgba(189,255,0,0.95), rgba(57,146,255,0.7));
+            border-top-left-radius: inherit;
+            border-bottom-left-radius: inherit;
+            opacity: 0.85;
+        }
+
+        .toc-active {
+            color: #BDFF00;
+            border-color: rgba(189,255,0,0.35);
+            background: rgba(189,255,0,0.08);
+        }
     </style>
 </head>
 <body class="bg-transparent text-on-surface font-body-md min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container relative overflow-x-hidden" style="-webkit-tap-highlight-color: transparent;">
@@ -854,6 +906,12 @@
         };
     }
 
+    function decodeCodeText(text) {
+        return String(text || '')
+            .replace(/\\n/g, '\n')
+            .replace(/\\t/g, '\t');
+    }
+
     function sanitizeBlocks(blocks) {
         return (Array.isArray(blocks) ? blocks : [])
             .map((block, index) => {
@@ -884,11 +942,11 @@
         if (block.type === 'heading') {
             const level = Math.max(1, Math.min(4, Number(data.level || 2)));
             const sizeClass = level === 1 ? 'text-3xl' : level === 2 ? 'text-2xl' : level === 3 ? 'text-xl' : 'text-lg';
-            return `<h${level} class="text-white font-headline-lg ${sizeClass}">${escapeHtml(data.text || '')}</h${level}>`;
+            return `<h${level} id="${escapeAttribute(block.id)}" class="text-white font-headline-lg ${sizeClass} scroll-mt-28 md:scroll-mt-32">${escapeHtml(data.text || '')}</h${level}>`;
         }
         if (block.type === 'image') {
             return `
-                <figure class="space-y-2">
+                <figure class="blog-block space-y-3 rounded-3xl p-3 md:p-4">
                     <img src="${escapeAttribute(data.url || '')}" alt="${escapeAttribute(data.alt || '')}" class="w-full rounded-2xl border border-glass-border object-cover">
                     ${data.caption ? `<figcaption class="text-sm text-on-surface-variant">${escapeHtml(data.caption)}</figcaption>` : ''}
                 </figure>
@@ -896,18 +954,18 @@
         }
         if (block.type === 'code') {
             return `
-                <figure class="space-y-2">
-                    <div class="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-primary-fixed-dim">
+                <figure id="${escapeAttribute(block.id)}" class="blog-block space-y-3 rounded-3xl p-3 md:p-4">
+                    <div class="flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-primary-fixed-dim">
                         <span>${escapeHtml(data.language || 'code')}</span>
                         <span>Code sample</span>
                     </div>
-                    <pre class="overflow-x-auto rounded-2xl border border-glass-border bg-surface-charcoal/80 p-4 text-sm text-white"><code>${escapeHtml(data.code || '')}</code></pre>
+                    <pre class="overflow-x-auto rounded-2xl border border-glass-border bg-surface-charcoal/90 p-4 md:p-5 text-sm md:text-[15px] text-white leading-relaxed"><code class="font-code-sm">${escapeHtml(decodeCodeText(data.code || ''))}</code></pre>
                 </figure>
             `;
         }
         if (block.type === 'quote') {
             return `
-                <blockquote class="rounded-2xl border-l-4 border-cyber-lime bg-white/5 p-5 text-white">
+                <blockquote id="${escapeAttribute(block.id)}" class="blog-block rounded-3xl p-5 md:p-6 text-white">
                     <p class="text-base md:text-lg leading-relaxed">${escapeHtml(data.text || '')}</p>
                     ${data.cite ? `<footer class="mt-3 text-sm text-on-surface-variant">— ${escapeHtml(data.cite)}</footer>` : ''}
                 </blockquote>
@@ -915,13 +973,13 @@
         }
         if (block.type === 'link') {
             return `
-                <a class="inline-flex items-center gap-2 rounded-full border border-glass-border px-4 py-2 text-sm text-white hover:text-cyber-lime transition-colors" href="${escapeAttribute(data.url || '#')}" target="_blank" rel="noopener noreferrer">
+                <a id="${escapeAttribute(block.id)}" class="inline-flex items-center gap-2 rounded-full border border-glass-border px-4 py-2 text-sm text-white hover:text-cyber-lime transition-colors" href="${escapeAttribute(data.url || '#')}" target="_blank" rel="noopener noreferrer">
                     <span>${escapeHtml(data.label || data.url || 'Link')}</span>
                     <span class="material-symbols-outlined text-[18px]">open_in_new</span>
                 </a>
             `;
         }
-        return `<p class="text-on-surface-variant leading-relaxed whitespace-pre-line">${escapeHtml(data.text || '')}</p>`;
+        return `<p id="${escapeAttribute(block.id)}" class="blog-block rounded-3xl p-4 md:p-5 text-on-surface-variant leading-relaxed whitespace-pre-line">${escapeHtml(data.text || '')}</p>`;
     }
 
     function blocksToHtml(blocks) {
@@ -1128,34 +1186,84 @@
         `).join('');
     }
 
-    function renderBlogPost(post) {
+    function buildBlogToc(blocks) {
+        return sanitizeBlocks(blocks)
+            .filter((block) => block.type === 'heading')
+            .map((block) => {
+                const data = normalizeBlockData(block.type, block.data);
+                return {
+                    id: block.id,
+                    label: data.text || 'Section'
+                };
+            });
+    }
+
+    function renderBlogPost(post, nextPost = null) {
         const state = document.getElementById('blog-post-state');
         if (!state) return;
         document.title = `${post.title} - Nguyen Nhat Bang`;
         state.classList.remove('hidden');
+        const toc = buildBlogToc(post.contentBlocks || []);
+        const bodyHtml = post.contentBlocks && post.contentBlocks.length ? blocksToHtml(post.contentBlocks) : (post.contentHtml || `<p>${escapeHtml(post.contentMarkdown || '')}</p>`);
+        const nextButton = nextPost
+            ? `<a href="/blog/${escapeAttribute(nextPost.slug)}" class="inline-flex items-center gap-2 rounded-lg border border-glass-border px-4 py-2 text-sm text-white hover:text-cyber-lime transition-all duration-300 hover:translate-x-1 hover:border-primary/40 bg-white/0 hover:bg-white/5">Next blog <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>`
+            : `<span class="rounded-lg border border-glass-border px-4 py-2 text-sm text-on-surface-variant opacity-60">No next post</span>`;
+
         state.innerHTML = `
-            <header class="space-y-4 rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-8">
-                <div class="flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
-                    <span class="rounded-full border border-glass-border px-2.5 py-1 font-code-sm uppercase tracking-[0.18em] text-cyber-lime">${escapeHtml(post.status)}</span>
-                    <span>${escapeHtml(formatDate(post.publishedAt))}</span>
-                    <span>${escapeHtml(post.readingTimeMinutes)} min read</span>
-                </div>
-                <h1 class="text-3xl md:text-5xl font-display-lg text-white tracking-tight leading-tight">${escapeHtml(post.title)}</h1>
-                <p class="text-base md:text-lg text-on-surface-variant leading-relaxed">${escapeHtml(post.excerpt)}</p>
-                <div class="flex flex-wrap gap-2">
-                    ${(post.tags || []).map((tag) => `<span class="rounded-full bg-white/5 px-3 py-1 text-xs text-white/80">${escapeHtml(tag)}</span>`).join('')}
-                </div>
-            </header>
-            <section class="rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-8 space-y-4">
-                <div class="space-y-4 text-on-surface-variant leading-relaxed">
-                    ${post.contentBlocks && post.contentBlocks.length ? blocksToHtml(post.contentBlocks) : (post.contentHtml || `<p>${escapeHtml(post.contentMarkdown || '')}</p>`)}
-                </div>
-            </section>
-            <div class="flex flex-wrap gap-3">
-                <a href="/blog" class="rounded-lg border border-glass-border px-4 py-2 text-sm text-white hover:text-cyber-lime transition-colors">Back to blog</a>
-                <a href="/" class="rounded-lg border border-glass-border px-4 py-2 text-sm text-white hover:text-cyber-lime transition-colors">Home</a>
+            <div class="grid gap-6 lg:grid-cols-[minmax(0,2.05fr)_minmax(280px,0.95fr)] items-start">
+                <article class="space-y-6">
+                    <header class="space-y-4 rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-8 blog-block">
+                        <div class="flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
+                            <span class="rounded-full border border-glass-border px-2.5 py-1 font-code-sm uppercase tracking-[0.18em] text-cyber-lime">${escapeHtml(post.status)}</span>
+                            <span>${escapeHtml(formatDate(post.publishedAt))}</span>
+                            <span>${escapeHtml(post.readingTimeMinutes)} min read</span>
+                        </div>
+                        <h1 class="text-3xl md:text-5xl font-display-lg text-white tracking-tight leading-tight">${escapeHtml(post.title)}</h1>
+                        <p class="text-base md:text-lg text-white/85 leading-relaxed max-w-3xl">${escapeHtml(post.excerpt)}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${(post.tags || []).map((tag) => `<span class="rounded-full border border-glass-border bg-white/5 px-3 py-1 text-xs text-white/90">${escapeHtml(tag)}</span>`).join('')}
+                        </div>
+                    </header>
+                    <section class="space-y-4 rounded-3xl border border-glass-border bg-surface-container/40 p-5 md:p-8 blog-block">
+                        <div class="space-y-5 text-white/88 leading-relaxed">
+                            ${bodyHtml}
+                        </div>
+                    </section>
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <a href="/blog" class="rounded-lg border border-glass-border px-4 py-2 text-sm text-white hover:text-cyber-lime transition-all duration-300 hover:border-cyber-lime/40 hover:bg-white/5">Back to blog</a>
+                        ${nextButton}
+                    </div>
+                </article>
+                <aside class="space-y-4 lg:sticky lg:top-28">
+                    <div class="rounded-3xl border border-glass-border bg-surface-container/45 p-5 md:p-6 blog-block">
+                        <div class="text-[11px] uppercase tracking-[0.22em] text-primary-fixed-dim">Table of contents</div>
+                        <h2 class="mt-2 text-xl font-headline-lg text-white">Jump to section</h2>
+                        <div class="mt-4 space-y-2">
+                            ${toc.length ? toc.map((item, index) => `
+                                <a href="#${escapeAttribute(item.id)}" data-toc-link="${escapeAttribute(item.id)}" class="toc-link flex items-center gap-3 rounded-2xl border border-transparent px-3 py-2 text-sm text-on-surface-variant transition-all duration-300 hover:text-cyber-lime hover:border-glass-border hover:bg-white/5">
+                                    <span class="flex h-6 w-6 items-center justify-center rounded-full border border-glass-border text-[11px] text-white/80">${index + 1}</span>
+                                    <span class="leading-snug">${escapeHtml(item.label)}</span>
+                                </a>
+                            `).join('') : '<div class="rounded-2xl border border-glass-border bg-white/5 p-4 text-sm text-on-surface-variant">No sections detected yet.</div>'}
+                        </div>
+                    </div>
+                    <div class="rounded-3xl border border-glass-border bg-surface-container/45 p-5 md:p-6 blog-block">
+                        <div class="text-[11px] uppercase tracking-[0.22em] text-primary-fixed-dim">Reading mode</div>
+                        <p class="mt-2 text-sm text-white/80 leading-relaxed">
+                            Headings, code, images, and quotes are highlighted to keep the structure visually consistent with the paper-style writing.
+                        </p>
+                    </div>
+                </aside>
             </div>
         `;
+
+        requestAnimationFrame(() => {
+            state.classList.add('blog-transition-enter');
+            requestAnimationFrame(() => {
+                state.classList.add('blog-transition-enter-active');
+                state.classList.remove('blog-transition-enter');
+            });
+        });
     }
 
     async function loadBlogList() {
@@ -1184,20 +1292,51 @@
         const error = document.getElementById('blog-post-error');
         const state = document.getElementById('blog-post-state');
         if (!loading || !error || !state) return;
+        state.classList.remove('blog-transition-enter-active');
+        state.classList.add('blog-transition-exit');
+        requestAnimationFrame(() => {
+            state.classList.add('blog-transition-exit-active');
+        });
         loading.classList.remove('hidden');
         error.classList.add('hidden');
         state.classList.add('hidden');
         try {
-            const response = await fetch(`${BLOG_API_BASE}/api/blog/posts/${encodeURIComponent(slug)}`);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const data = await response.json();
-            renderBlogPost(data.item);
+            const [detailResponse, listResponse] = await Promise.all([
+                fetch(`${BLOG_API_BASE}/api/blog/posts/${encodeURIComponent(slug)}`),
+                fetch(`${BLOG_API_BASE}/api/blog/posts?status=published&limit=100`)
+            ]);
+            if (!detailResponse.ok) throw new Error(`HTTP ${detailResponse.status}`);
+            if (!listResponse.ok) throw new Error(`HTTP ${listResponse.status}`);
+            const [detailData, listData] = await Promise.all([detailResponse.json(), listResponse.json()]);
+            const posts = listData.items || [];
+            const currentIndex = posts.findIndex((item) => item.slug === slug);
+            const nextPost = currentIndex >= 0 ? posts[currentIndex - 1] || posts[currentIndex + 1] || null : null;
+            renderBlogPost(detailData.item, nextPost);
+            const tocLinks = Array.from(document.querySelectorAll('[data-toc-link]'));
+            const tocMap = new Map(tocLinks.map((link) => [link.getAttribute('data-toc-link'), link]));
+            const headingEls = Array.from(document.querySelectorAll('#blog-post-state h2, #blog-post-state h3, #blog-post-state h4'));
+            const activateToc = (id) => {
+                tocLinks.forEach((link) => link.classList.remove('toc-active'));
+                const activeLink = tocMap.get(id);
+                if (activeLink) activeLink.classList.add('toc-active');
+            };
+            if (headingEls.length) {
+                const observer = new IntersectionObserver((entries) => {
+                    const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+                    if (visible?.target?.id) activateToc(visible.target.id);
+                }, { rootMargin: '-20% 0px -65% 0px', threshold: [0.2, 0.35, 0.5] });
+                headingEls.forEach((el) => observer.observe(el));
+            }
         } catch (err) {
             error.textContent = `Failed to load article "${slug}".`;
             error.classList.remove('hidden');
             state.innerHTML = '';
         } finally {
             loading.classList.add('hidden');
+            state.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                state.classList.remove('blog-transition-exit-active');
+            });
         }
     }
 
