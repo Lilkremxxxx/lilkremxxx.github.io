@@ -553,7 +553,7 @@
                 <div class="max-w-3xl space-y-4">
                     <p class="text-xs md:text-sm font-code-sm uppercase tracking-[0.18em] text-cyber-lime">Blog</p>
                     <h2 class="font-display-lg text-4xl md:text-6xl text-white tracking-tight leading-tight">
-                        Hi there, This is my blog
+                        Welcome to my blog
                     </h2>
                 </div>
             </div>
@@ -1247,11 +1247,26 @@
     function renderBlogList(items) {
         const list = document.getElementById('blog-list-state');
         if (!list) return;
+        const preferredOrder = new Map([
+            ['healthcare-stroke-prediction', 0],
+            ['lung-cancer-aff-cpp-inference', 1],
+            ['welcome-to-my-blog', 2]
+        ]);
+        const orderedItems = [...items]
+            .filter((post) => post.slug !== 'welcome-to-my-blog')
+            .sort((a, b) => {
+                const aRank = preferredOrder.has(a.slug) ? preferredOrder.get(a.slug) : 999;
+                const bRank = preferredOrder.has(b.slug) ? preferredOrder.get(b.slug) : 999;
+                if (aRank !== bRank) return aRank - bRank;
+                const aDate = new Date(a.publishedAt || 0).getTime();
+                const bDate = new Date(b.publishedAt || 0).getTime();
+                return bDate - aDate;
+            });
         if (!items.length) {
             list.innerHTML = '<div class="rounded-2xl border border-glass-border bg-surface-container/40 p-6 text-sm text-on-surface-variant">No posts yet.</div>';
             return;
         }
-        list.innerHTML = items.map((post, index) => `
+        list.innerHTML = orderedItems.map((post, index) => `
             <a href="/blog/${post.slug}" class="group block rounded-2xl border border-glass-border bg-surface-container/40 p-5 md:p-6 transition-all duration-300 hover:border-primary/40 hover:bg-surface-container/70">
                 <div class="grid gap-4 md:grid-cols-[1fr_auto] md:items-start">
                     <div class="space-y-3">
