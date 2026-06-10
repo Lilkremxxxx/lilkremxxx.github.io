@@ -1280,21 +1280,21 @@
 
         state.innerHTML = `
             <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_360px] items-start">
-                <article class="space-y-6 w-full">
-                    <header class="space-y-4 border-b border-glass-border/70 pb-6 md:pb-8 w-full">
+                <article class="space-y-8 w-full">
+                    <header class="space-y-4 border-b border-white/10 pb-8 md:pb-10 w-full">
                         <div class="flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
                             <span class="rounded-full border border-glass-border px-2.5 py-1 font-code-sm uppercase tracking-[0.18em] text-cyber-lime">${escapeHtml(post.status)}</span>
                             <span>${escapeHtml(formatDate(post.publishedAt))}</span>
                             <span>${escapeHtml(post.readingTimeMinutes)} min read</span>
                         </div>
-                        <h1 class="text-3xl md:text-5xl font-display-lg text-white tracking-tight leading-tight">${escapeHtml(post.title)}</h1>
-                        <p class="text-base md:text-lg text-white/85 leading-relaxed max-w-3xl">${escapeHtml(post.excerpt)}</p>
+                        <h1 class="text-3xl md:text-5xl font-display-lg text-white tracking-tight leading-tight max-w-4xl">${escapeHtml(post.title)}</h1>
+                        <p class="text-base md:text-lg text-white/80 leading-[1.8] max-w-4xl">${escapeHtml(post.excerpt)}</p>
                         <div class="flex flex-wrap gap-2">
                             ${(post.tags || []).map((tag) => `<span class="rounded-full border border-glass-border bg-white/5 px-3 py-1 text-xs text-white/90">${escapeHtml(tag)}</span>`).join('')}
                         </div>
                     </header>
-                    <section class="space-y-4 w-full">
-                        <div class="mx-auto max-w-none space-y-6 text-white/92 leading-[1.85] text-left text-[16px] md:text-[17px]">
+                    <section class="space-y-6 w-full">
+                        <div class="mx-auto max-w-none space-y-6 text-white/95 leading-[1.92] text-left text-[16px] md:text-[17px] tracking-[0.01em]">
                             ${bodyHtml}
                         </div>
                     </section>
@@ -1304,7 +1304,7 @@
                     </div>
                 </article>
                 <aside class="space-y-4 lg:sticky lg:top-24 w-full">
-                    <div class="rounded-3xl border border-glass-border bg-surface-container/80 p-5 md:p-6 shadow-[0_24px_70px_rgba(0,0,0,0.34)] backdrop-blur-md">
+                    <div class="rounded-3xl border border-white/10 bg-black/20 p-5 md:p-6 shadow-[0_24px_70px_rgba(0,0,0,0.34)] backdrop-blur-md">
                         <div class="text-[11px] uppercase tracking-[0.22em] text-primary-fixed-dim">Table of contents</div>
                         <h2 class="mt-2 text-xl font-headline-lg text-white">Jump to section</h2>
                         <div class="mt-4 space-y-2">
@@ -1316,7 +1316,7 @@
                             `).join('') : '<div class="rounded-2xl border border-glass-border bg-white/5 p-4 text-sm text-on-surface-variant">No sections detected yet.</div>'}
                         </div>
                     </div>
-                    <div class="rounded-3xl border border-glass-border bg-surface-container/50 p-5 md:p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+                    <div class="rounded-3xl border border-white/10 bg-black/15 p-5 md:p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
                         <div class="text-[11px] uppercase tracking-[0.22em] text-primary-fixed-dim">Reading mode</div>
                         <p class="mt-2 text-sm text-white/80 leading-relaxed">
                             Headings, code, images, and quotes are highlighted to keep the structure visually consistent with the paper-style writing.
