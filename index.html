@@ -1047,9 +1047,25 @@
         return `<p id="${escapeAttribute(block.id)}" class="blog-block rounded-3xl p-4 md:p-5 text-on-surface-variant leading-relaxed whitespace-pre-line">${escapeHtml(data.text || '')}</p>`;
     }
 
+    function isDataRelevantCodeSection(sectionLabel = '', language = '') {
+        const text = String(sectionLabel || '').toLowerCase();
+        const lang = String(language || '').toLowerCase();
+        const sectionMatch = /(method|methodology|materials|preprocessing|pipeline|deployment|experiment|results|implementation|model|feature|data|analysis)/.test(text);
+        const languageMatch = /(python|bash|shell|cpp|c\+\+)/.test(lang);
+        return sectionMatch && languageMatch;
+    }
+
     function blocksToHtml(blocks) {
         let figureCounter = 0;
+        let activeSection = '';
         const content = sanitizeBlocks(blocks).map((block) => {
+            if (block.type === 'heading') {
+                const data = normalizeBlockData(block.type, block.data);
+                activeSection = data.text || activeSection;
+            }
+            if (block.type === 'code' && !isDataRelevantCodeSection(activeSection, normalizeBlockData(block.type, block.data).language)) {
+                return '';
+            }
             const figureIndex = block.type === 'image' ? ++figureCounter : figureCounter;
             return blockToHtml(block, figureIndex);
         }).join('');
@@ -1288,7 +1304,7 @@
             : `<span class="rounded-lg border border-glass-border px-4 py-2 text-sm text-on-surface-variant opacity-60">No next post</span>`;
 
         state.innerHTML = `
-            <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_360px] items-start">
+            <div class="grid gap-8 lg:grid-cols-[minmax(0,1.45fr)_320px] xl:grid-cols-[minmax(0,1.65fr)_340px] items-start">
                 <article class="space-y-8 w-full">
                     <header class="space-y-4 border-b border-white/10 pb-8 md:pb-10 w-full">
                         <div class="flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
@@ -1303,7 +1319,7 @@
                         </div>
                     </header>
                     <section class="space-y-6 w-full">
-                        <div class="mx-auto max-w-none space-y-6 text-white/95 leading-[1.92] text-left text-[16px] md:text-[17px] tracking-[0.01em]">
+                        <div class="w-full max-w-none space-y-6 text-white/95 leading-[1.92] text-left text-[16px] md:text-[17px] tracking-[0.01em]">
                             ${bodyHtml}
                         </div>
                     </section>
