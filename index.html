@@ -1255,9 +1255,18 @@
         `).join('');
     }
 
-    function buildBlogToc(blocks) {
+    function buildBlogToc(blocks, postTitle = '') {
         return sanitizeBlocks(blocks)
-            .filter((block) => block.type === 'heading' && Number(normalizeBlockData(block.type, block.data).level || 2) <= 2)
+            .filter((block) => {
+                if (block.type !== 'heading') return false;
+                const data = normalizeBlockData(block.type, block.data);
+                const level = Number(data.level || 2);
+                const label = String(data.text || '').trim();
+                if (!label) return false;
+                if (level !== 2) return false;
+                if (postTitle && label.toLowerCase() === String(postTitle).trim().toLowerCase()) return false;
+                return true;
+            })
             .map((block) => {
                 const data = normalizeBlockData(block.type, block.data);
                 return {
@@ -1272,7 +1281,7 @@
         if (!state) return;
         document.title = `${post.title} - Nguyen Nhat Bang`;
         state.classList.remove('hidden');
-        const toc = buildBlogToc(post.contentBlocks || []);
+        const toc = buildBlogToc(post.contentBlocks || [], post.title || '');
         const bodyHtml = post.contentBlocks && post.contentBlocks.length ? blocksToHtml(post.contentBlocks) : (post.contentHtml || `<p>${escapeHtml(post.contentMarkdown || '')}</p>`);
         const nextButton = nextPost
             ? `<a href="/blog/${escapeAttribute(nextPost.slug)}" class="inline-flex items-center gap-2 rounded-lg border border-glass-border px-4 py-2 text-sm text-white hover:text-cyber-lime transition-all duration-300 hover:translate-x-1 hover:border-primary/40 bg-white/0 hover:bg-white/5">Next blog <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>`
