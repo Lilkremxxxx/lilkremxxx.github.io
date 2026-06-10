@@ -740,6 +740,13 @@
     // SPA Routing Logic
     function handleRoute() {
         const path = window.location.pathname;
+        const storedRedirect = sessionStorage.getItem('spa:redirect');
+        if (storedRedirect && path === '/') {
+            sessionStorage.removeItem('spa:redirect');
+            const redirectUrl = new URL(storedRedirect, window.location.origin);
+            window.history.replaceState(null, '', redirectUrl.pathname + redirectUrl.search + redirectUrl.hash);
+        }
+        const activePath = window.location.pathname;
         
         // Hide all views
         document.querySelectorAll('.page-view').forEach(el => {
@@ -749,14 +756,14 @@
         });
 
         let targetId = 'view-home';
-        if (path === '/about' || window.location.hash === '#about') targetId = 'view-about';
-        else if (path === '/education' || window.location.hash === '#education') targetId = 'view-education';
-        else if (path === '/project' || window.location.hash === '#project') targetId = 'view-project';
-        else if (path === '/blog' || window.location.hash === '#blog') targetId = 'view-blog';
-        else if (path === '/admin/blog') targetId = 'view-admin-blog';
-        else if (path.startsWith('/blog/')) targetId = 'view-blog-post';
-        else if (path === '/skill' || window.location.hash === '#skill') targetId = 'view-skill';
-        else if (path === '/contact' || window.location.hash === '#contact') targetId = 'view-contact';
+        if (activePath === '/about' || window.location.hash === '#about') targetId = 'view-about';
+        else if (activePath === '/education' || window.location.hash === '#education') targetId = 'view-education';
+        else if (activePath === '/project' || window.location.hash === '#project') targetId = 'view-project';
+        else if (activePath === '/blog' || window.location.hash === '#blog') targetId = 'view-blog';
+        else if (activePath === '/admin/blog') targetId = 'view-admin-blog';
+        else if (activePath.startsWith('/blog/')) targetId = 'view-blog-post';
+        else if (activePath === '/skill' || window.location.hash === '#skill') targetId = 'view-skill';
+        else if (activePath === '/contact' || window.location.hash === '#contact') targetId = 'view-contact';
 
         const targetView = document.getElementById(targetId);
         if (targetView) {
@@ -767,13 +774,13 @@
             targetView.classList.add('opacity-100');
         }
 
-        if (path === '/blog') {
+        if (activePath === '/blog') {
             loadBlogList();
-        } else if (path === '/admin/blog') {
+        } else if (activePath === '/admin/blog') {
             resetAdminForm();
             loadAdminPosts();
-        } else if (path.startsWith('/blog/')) {
-            const slug = path.replace('/blog/', '').replace(/\/$/, '');
+        } else if (activePath.startsWith('/blog/')) {
+            const slug = activePath.replace('/blog/', '').replace(/\/$/, '');
             if (slug) loadBlogPost(slug);
         }
     }
